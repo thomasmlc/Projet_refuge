@@ -1,0 +1,10 @@
+<%- include("header") -%>
+<h3>Liste des refuges : </h3>
+        <table >
+            <% for(var i=0; i < refuges.length; i++) { %>
+               <tr>
+                 <td><a href="/refuges/<%= refuges[i].id %>"><%= refuges[i].name %></a></td>
+               </tr>
+            <% } %>
+        </table>
+<%- include("footer") -%>

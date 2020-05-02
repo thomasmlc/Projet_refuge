@@ -95,7 +95,7 @@ app.get('/refuges', function(request, res){
 
     Refuges.findAll(filter).then ((refuges)=>{
         
-        res.render('main', {
+        res.render('refuges', {
         title: 'Bonjour',
         
         refuges: refuges
@@ -128,31 +128,3 @@ app.get('/refuges/:id', function(request, response){
 });
 
 app.listen(8000)
-
-//**************************************************************//
-app.set("view engine", "ejs");
-
-app.get("/", (req, res) => {
-    // res.send ("Hello world...");
-    res.render("index")
-});
-
-app.get("/about", (req, res) => {
-    res.render("about");
-});
-
-app.get("/data", (req, res) => {
-    const test = {
-        title: "Test",
-        items: ["one", "two", "three"]
-    };
-    res.render("data", { model: test });
-});
-
-app.get("/shelters", (req, res) => {
-    Refuges.findAll()
-        .then(refuges => res.render("shelters", {
-            refuges
-        }))
-        .catch(err => console.log(err))
-});
