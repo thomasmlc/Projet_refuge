@@ -8,8 +8,10 @@ const { Op } = Sequelize;
 const app = express();
 
 app.use(bodyParser.json());
+app.set('views', './views')
+app.set('view engine', 'ejs')
 
-app.delete('api/refuges/:id', function(request, response) {
+app.delete('refuges/:id', function(request, response) {
     let { id } = request.params;
 
     Refuges.findByPk(id).then((refuge)=> {
@@ -19,7 +21,42 @@ app.delete('api/refuges/:id', function(request, response) {
     })
 })
 
-app.post('/api/genres', function(request, response){
+app.get('/', function(request, res) {
+    let filter = {};
+    let { q } = request.query
+
+    if(request.query.q) {
+        filter = {
+            where: {
+                name: {
+                    
+                    [Op.like]: `%${q}%`
+                }
+            },
+            
+        
+        };
+    }
+    
+    Refuges.findAll(filter).then ((refuges)=>{
+        
+        res.render('main', {
+        title: 'Bonjour',
+        name:'Toto',
+        refuges: refuges
+
+    })
+        
+        
+        
+
+    })
+
+    
+})
+
+
+app.post('/refuges', function(request, response){
     Refuges.create({
         name: request.body.name,
         adress: request.body.adress
@@ -40,7 +77,7 @@ app.post('/api/genres', function(request, response){
     
 })
 
-app.get('/api/refuges', function(request, response){
+app.get('/refuges', function(request, res){
     let filter = {};
     let { q } = request.query
 
@@ -52,22 +89,36 @@ app.get('/api/refuges', function(request, response){
                     [Op.like]: `%${q}%`
                 }
             }
+        
         };
     }
 
     Refuges.findAll(filter).then ((refuges)=>{
-        response.json(refuges);
+        
+        res.render('main', {
+        title: 'Bonjour',
+        
+        refuges: refuges
+
+    })
+        
+        
+        
 
     })
 });
 
-app.get('/api/refuges/:id', function(request, response){
+app.get('/refuges/:id', function(request, response){
     let { id } = request.params;
 
     Refuges.findByPk(id).then ((refuge)=>{
 
         if (refuge){
-            response.json(refuge);
+            response.render('refuge',{
+                title: refuge.name,
+                refuge: refuge
+                })
+            
         }else{
             response.status(404).send();
         }
