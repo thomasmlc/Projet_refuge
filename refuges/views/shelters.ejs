@@ -1,0 +1,16 @@
+<%- include("header") -%>
+
+<h1>List of shelters</h1>
+
+<ul>
+
+    <% for (const refuge of refuges) { %>
+        <li>
+            <%= refuge.name %>
+            <em>(<%= refuge.adress %>)</em>
+        </li>
+    <% } %>
+
+</ul>
+
+<%- include("footer") -%>
