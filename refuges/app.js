@@ -118,8 +118,12 @@ app.get('/refuges/:id', function(request, response){
                 title: refuge.name,
                 refuge: refuge
                 })
-            
-        }else{
+        }
+        else if (request.params.id == "add") {
+            response.render("add", { refuge: {} });
+        }
+        else{
+
             response.status(404).send();
         }
 
@@ -128,3 +132,50 @@ app.get('/refuges/:id', function(request, response){
 });
 
 app.listen(8000)
+
+app.get("/refuges/edit/:id", (request, response) => {
+    let { id } = request.params;
+
+    Refuges.findByPk(id).then ((refuge)=>{
+
+        if (refuge){
+            response.render('edit',{
+                refuge: refuge
+            })
+
+        }else{
+            response.status(404).send();
+        }
+    })
+});
+
+app.post("/refuges/edit/:id", (request, response) => {
+
+});
+
+app.post("/refuges/add", (request, response) => {
+});
+
+app.get("/refuges/delete/:id", (request, response) => {
+    const id = request.params.id;
+    Refuges.findByPk(id).then ((refuge)=>{
+
+        if (refuge){
+            response.render('delete',{
+                refuge: refuge
+            })
+
+        }else{
+            response.status(404).send();
+        }
+    })
+});
+
+app.delete("/delete/:id", (request, response) => {
+    const id = request.params.id;
+    Refuges.findByPk(id).then((refuge)=> {
+        refuge.destroy().then(() => {
+            response.status(204).send()
+        })
+    })
+});
