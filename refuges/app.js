@@ -7,6 +7,7 @@ const { Op } = Sequelize;
 
 const app = express();
 
+app.use(express.urlencoded({ extended: true }))
 app.use(bodyParser.json());
 app.set('views', './views')
 app.set('view engine', 'ejs')
@@ -46,9 +47,6 @@ app.get('/', function(request, res) {
         refuges: refuges
 
     })
-        
-        
-        
 
     })
 
@@ -101,9 +99,6 @@ app.get('/refuges', function(request, res){
         refuges: refuges
 
     })
-        
-        
-        
 
     })
 });
@@ -131,8 +126,6 @@ app.get('/refuges/:id', function(request, response){
     })
 });
 
-app.listen(8000)
-
 app.get("/refuges/edit/:id", (request, response) => {
     let { id } = request.params;
 
@@ -154,6 +147,12 @@ app.post("/refuges/edit/:id", (request, response) => {
 });
 
 app.post("/refuges/add", (request, response) => {
+    Refuges.create({
+        name: request.body.name,
+        adress: request.body.adress
+    }) .then(() => {
+        response.redirect('/refuges');
+    })
 });
 
 app.get("/refuges/delete/:id", (request, response) => {
@@ -171,11 +170,14 @@ app.get("/refuges/delete/:id", (request, response) => {
     })
 });
 
-app.delete("/delete/:id", (request, response) => {
+app.post("refuges/delete/:id", (request, response) => {
     const id = request.params.id;
+    response.redirect('/refuges');
     Refuges.findByPk(id).then((refuge)=> {
         refuge.destroy().then(() => {
-            response.status(204).send()
+            response.redirect('/refuges');
         })
     })
 });
+
+app.listen(8000)
