@@ -5,24 +5,32 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     </head>
     <body class="container text-center">
-        <h1 class="">Bonjour</h1>
-        
-       
-            <h3><%= refuge.name %></h3>
-            <p><%= refuge.adress %></p>
-               
-            <div class="card mx-auto" style="width: 500px; height: 200px;">
-               
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="/">Les Refuges de Bordeaux</a>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/refuges">Refuges</a>
+                </li>
+            </ul>
+        </nav>
+             
+         
+            <div class="card mx-auto vertical-center" style="width: 500px; height: 430px; margin-top: 100px;">
+            
                 <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  
+                <h5 class="card-title"><%= refuge.name %></h5>
+                <p class="card-text"><%= refuge.adress %></p>
+                <div id="googleMap" style="width:440px;height:300px;"></div>
+                
                 </div>
             </div>
-
+        
         <a class="btn btn-sm btn-warning" href="/refuges/edit/<%= refuge.id %>">Edit</a>
         <a class="btn btn-sm btn-danger" href="/refuges/delete/<%= refuge.id %>">Delete</a>
+        
 
-
+        </div>
     </body>
+
+    
 </html>
