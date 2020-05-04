@@ -1,9 +1,12 @@
 const sqlite3 = require('sqlite3')
 const db_name = 'refuges.sqlite'
 
+// Create a new connection to a database if not exist create it
 let db = new sqlite3.Database(db_name, err => {
+
     if(err)
         throw err
+
     console.log('Database start on '+db_name)
 
     //db.run(`CREATE TABLE refuges(id INTEGER PRIMARY KEY,name VARCHAR(255), adress VARCHAR(255) )`)

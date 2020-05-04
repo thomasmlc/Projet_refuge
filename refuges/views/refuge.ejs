@@ -4,7 +4,7 @@
         <title><%=title %></title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     </head>
-    <body >
+    <body>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="/">Les Refuges de Bordeaux</a>
             <ul class="navbar-nav mr-auto">
@@ -20,32 +20,35 @@
             <div class="card mx-auto vertical-center" style="width: 500px; height: 430px; margin-top: 100px;">
             
                 <div class="card-body">
-                <h5 class="card-title"><%= refuge.name %></h5>
-                <p class="card-text"><%= refuge.adress %></p>
-                <div id="map" style="width:440px;height:300px;"></div>
+
+                    <h5 class="card-title"><%= refuge.name %></h5>
+                    <p class="card-text"><%= refuge.adress %></p>
+                    <div id="map" style="width:440px;height:300px;"></div>
                 
                 </div>
+
             </div>
         
-        <a class="btn btn-sm btn-warning" href="/refuges/edit/<%= refuge.id %>">Editer</a>
-        <a class="btn btn-sm btn-danger" href="/refuges/delete/<%= refuge.id %>">Supprimer</a>
+            <a class="btn btn-sm btn-warning" href="/refuges/edit/<%= refuge.id %>">Editer</a>
+            <a class="btn btn-sm btn-danger" href="/refuges/delete/<%= refuge.id %>">Supprimer</a>
         
 
         </div>
     
 
-    <script src="http://maps.googleapis.com/maps/api/js"></script>
-    <script>
+        <script src="http://maps.googleapis.com/maps/api/js"></script>
+        <script>
         
-        function initialize() {
-          let mapProp = {
-            center:new google.maps.LatLng(44.8333, -0.5667),
-            zoom:5,
-            mapTypeId:google.maps.MapTypeId.ROADMAP
-          };
-          var map=new google.maps.Map(document.getElementById("map"), mapProp);
-        }
-        google.maps.event.addDomListener(window, 'load', initialize);
+            function initialize() {
+            let mapProp = {
+                center:new google.maps.LatLng(44.8333, -0.5667),
+                zoom:5,
+                mapTypeId:google.maps.MapTypeId.ROADMAP
+            };
+            var map=new google.maps.Map(document.getElementById("map"), mapProp);
+            }
+            google.maps.event.addDomListener(window, 'load', initialize);
+
         </script>
-        </body>
+    </body>
 </html>

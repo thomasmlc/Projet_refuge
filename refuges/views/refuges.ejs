@@ -1,11 +1,17 @@
 <%- include("header") -%>
 <h3>Liste des refuges : </h3>
-        <table >
-            <% for(var i=0; i < refuges.length; i++) { %>
-               <tr>
-                 <td><a href="/refuges/<%= refuges[i].id %>"><%= refuges[i].name %></a></td>
-               </tr>
-            <% } %>
-        </table>
+
+    <form class="form-inline mt-2 mb-2">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    
+    <table >
+        <% for(var i=0; i < refuges.length; i++) { %>
+            <tr>
+                <td><a href="/refuges/<%= refuges[i].id %>"><%= refuges[i].name %></a></td>
+            </tr>
+        <% } %>
+    </table>
 <a class="btn btn-sm btn-success" href="/refuges/add">Ajouter un refuge</a>
 <%- include("footer") -%>

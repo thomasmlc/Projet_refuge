@@ -2,12 +2,14 @@ const Sequelize = require('sequelize')
 const sequelize = require('./../database/sequelize')
 
 module.exports = sequelize.define('refuges', {
+
     id: {
         field: 'id',
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
+
     name: {
         field: 'name',
         type: Sequelize.STRING,
@@ -18,6 +20,7 @@ module.exports = sequelize.define('refuges', {
             },
         }
     },
+
     adress: {
         field: 'adress',
         type: Sequelize.STRING,
@@ -29,6 +32,7 @@ module.exports = sequelize.define('refuges', {
         }
     }
 },
+
 {
     timestamps: false
 })
