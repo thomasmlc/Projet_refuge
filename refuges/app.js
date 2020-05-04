@@ -1,5 +1,4 @@
 const express = require('express')
-const bodyParser = require('body-parser')
 const Refuges = require('./models/refuges')
 const Sequelize = require('sequelize')
 
@@ -8,42 +7,41 @@ const { Op } = Sequelize;
 const app = express();
 
 app.use(express.urlencoded({ extended: true }))
-app.use(bodyParser.json());
 app.set('views', './views')
 app.set('view engine', 'ejs')
 
 
-// GET Index
+// Get main.ejs
 app.get('/', function(request, res) {
-    let filter = {};
-    let { q } = request.query
-
-    if(request.query.q) {
-        filter = {
-            where: {
-                name: {
-                    [Op.like]: `%${q}%`
-                }
-            },
-        };
-    }
     
-    Refuges.findAll(filter).then ((refuges) => {
-        res.render('main', {
-            title: 'Bonjour',
-            name:'Toto',
-            refuges: refuges
-        })
+    Refuges.findAll().then ((refuges) => {
+
+        if(refuges){
+
+            res.render('main', {
+                title: 'Bonjour',
+                name:'Toto',
+                refuges: refuges
+            })
+        }
+
+        else{
+            res.status(404).send()
+        }
     })
+    
 })
 
 
-// GET Refuges
+// Make search and GET refuges
 app.get('/refuges', function(request, res){
+
+    // q => rechercher avec nom correspondant
     let filter = {};
     let { q } = request.query
 
     if(request.query.q) {
+        
         filter = {
             where: {
                 name: {
@@ -53,11 +51,22 @@ app.get('/refuges', function(request, res){
         };
     }
 
-    Refuges.findAll(filter).then ((refuges)=>{
+// Get refuges correspondant a filter
+Refuges.findAll(filter).then ((refuges)=>{
+
+    if(refuges){
+
         res.render('refuges', {
+
             title: 'Bonjour',
             refuges: refuges
-        })
+
+            })
+
+    }else{
+        res.status(404).send()
+    }
+
     })
 });
 
@@ -67,28 +76,32 @@ app.get('/refuges/:id', function(request, response){
     let { id } = request.params;
 
     Refuges.findByPk(id).then ((refuge) => {
+
         if (refuge){
             response.render('refuge',{
                 title: refuge.name,
                 refuge: refuge
                 })
         }
+
         else if (request.params.id == "add") {
             response.render("add", { refuge: {} });
         }
-        else{
 
+        else{
             response.status(404).send();
         }
+        
     })
 });
 
 
-// GET Edit
+// GET Edit current values
 app.get("/refuges/edit/:id", (request, response) => {
     let { id } = request.params;
 
     Refuges.findByPk(id).then ((refuge) => {
+
         if (refuge){
             response.render('edit',{
                 refuge: refuge
@@ -103,12 +116,21 @@ app.get("/refuges/edit/:id", (request, response) => {
 // POST Edit
 app.post("/refuges/edit/:id", (request, response) => {
     Refuges.findByPk(request.params.id).then(refuge => {
-        refuge.update({
-            name: request.body.name,
-            adress: request.body.adress
-        });
+
+        if(refuge) {
+
+            refuge.update({
+                name: request.body.name,
+                adress: request.body.adress
+            });
+        }
+        else{
+            response.status(404).send();
+        }
+
         response.redirect('/refuges/'+request.params.id);
-    })
+        })
+            
 });
 
 
@@ -119,11 +141,13 @@ app.post("/refuges/add", (request, response) => {
         adress: request.body.adress
     }).then(() => {
         response.redirect('/refuges');
+    }).catch(()=> {
+        response.status(404).send();
     })
 });
 
 
-// GET Delete
+// GET Delete current values
 app.get("/refuges/delete/:id", (request, response) => {
     let id = request.params.id;
     Refuges.findByPk(id).then ((refuge)=>{
@@ -142,9 +166,15 @@ app.get("/refuges/delete/:id", (request, response) => {
 app.post("/refuges/delete/:id", (request, response) => {
     let id = request.params.id;
     Refuges.findByPk(id).then((refuge)=> {
-        refuge.destroy().then(() => {
-            response.redirect('/refuges');
-        })
+
+        if(refuge){
+            refuge.destroy().then(() => {
+                response.redirect('/refuges');
+            })
+        }else{
+            response.status(404).send();
+        }
+        
     })
 });
 
