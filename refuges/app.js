@@ -1,6 +1,7 @@
 const express = require('express')
 const Refuges = require('./models/refuges')
 const Sequelize = require('sequelize')
+const bodyParser = require('body-parser')
 
 const { Op } = Sequelize;
 
@@ -9,6 +10,7 @@ const app = express();
 app.use(express.urlencoded({ extended: true }))
 app.set('views', './views')
 app.set('view engine', 'ejs')
+app.use(bodyParser.json());
 
 
 // Get main.ejs
@@ -26,7 +28,7 @@ app.get('/', function(request, res) {
         }
 
         else{
-            res.status(404).send()
+            res.status(404).send('Error 404 not found')
         }
     })
     
@@ -64,7 +66,7 @@ Refuges.findAll(filter).then ((refuges)=>{
             })
 
     }else{
-        res.status(404).send()
+        res.status(404).send('Error 404 not found')
     }
 
     })
@@ -89,7 +91,7 @@ app.get('/refuges/:id', function(request, response){
         }
 
         else{
-            response.status(404).send();
+            response.status(404).send('Error 404 not found');
         }
         
     })
@@ -107,7 +109,7 @@ app.get("/refuges/edit/:id", (request, response) => {
                 refuge: refuge
             })
         }else{
-            response.status(404).send();
+            response.status(404).send('Error 404 not found');
         }
     })
 });
@@ -125,7 +127,7 @@ app.post("/refuges/edit/:id", (request, response) => {
             });
         }
         else{
-            response.status(404).send();
+            response.status(404).send('Error 404 not found');
         }
 
         response.redirect('/refuges/'+request.params.id);
@@ -142,7 +144,7 @@ app.post("/refuges/add", (request, response) => {
     }).then(() => {
         response.redirect('/refuges');
     }).catch(()=> {
-        response.status(404).send();
+        response.status(404).send('Error 404 not found');
     })
 });
 
@@ -156,7 +158,7 @@ app.get("/refuges/delete/:id", (request, response) => {
                 refuge: refuge
             })
         }else{
-            response.status(404).send();
+            response.status(404).send('Error 404 not found');
         }
     })
 });
@@ -172,7 +174,7 @@ app.post("/refuges/delete/:id", (request, response) => {
                 response.redirect('/refuges');
             })
         }else{
-            response.status(404).send();
+            response.status(404).send('Error 404 not found');
         }
         
     })
