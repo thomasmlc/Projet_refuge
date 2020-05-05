@@ -3,47 +3,50 @@ const Refuges = require('./models/refuges')
 const Sequelize = require('sequelize')
 const bodyParser = require('body-parser')
 
-const { Op } = Sequelize;
+const {
+    Op
+} = Sequelize;
 
 const app = express();
 
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({
+    extended: true
+}))
 app.set('views', './views')
 app.set('view engine', 'ejs')
 app.use(bodyParser.json());
 
 
 // Get main.ejs
-app.get('/', function(request, res) {
-    
-    Refuges.findAll().then ((refuges) => {
+app.get('/', function (request, res) {
 
-        if(refuges){
+    Refuges.findAll().then((refuges) => {
+
+        if (refuges) {
 
             res.render('main', {
                 title: 'Bonjour',
-                name:'Toto',
-                refuges: refuges
-            })
-        }
 
-        else{
+            })
+        } else {
             res.status(404).send('Error 404 not found')
         }
     })
-    
+
 })
 
 
 // Make search and GET refuges
-app.get('/refuges', function(request, res){
+app.get('/refuges', function (request, res) {
 
     // q => rechercher avec nom correspondant
     let filter = {};
-    let { q } = request.query
+    let {
+        q
+    } = request.query
 
-    if(request.query.q) {
-        
+    if (request.query.q) {
+
         filter = {
             where: {
                 name: {
@@ -53,62 +56,64 @@ app.get('/refuges', function(request, res){
         };
     }
 
-// Get refuges correspondant a filter
-Refuges.findAll(filter).then ((refuges)=>{
+    // Get refuges correspondant a filter
+    Refuges.findAll(filter).then((refuges) => {
 
-    if(refuges){
+        if (refuges) {
 
-        res.render('refuges', {
+            res.render('refuges', {
 
-            title: 'Bonjour',
-            refuges: refuges
+                title: 'Bonjour',
+                refuges: refuges
 
             })
 
-    }else{
-        res.status(404).send('Error 404 not found')
-    }
+        } else {
+            res.status(404).send('Error 404 not found')
+        }
 
     })
 });
 
 
 // GET Refuges and Add
-app.get('/refuges/:id', function(request, response){
-    let { id } = request.params;
+app.get('/refuges/:id', function (request, response) {
+    let {
+        id
+    } = request.params;
 
-    Refuges.findByPk(id).then ((refuge) => {
+    Refuges.findByPk(id).then((refuge) => {
 
-        if (refuge){
-            response.render('refuge',{
+        if (refuge) {
+            response.render('refuge', {
                 title: refuge.name,
                 refuge: refuge
-                })
-        }
-
-        else if (request.params.id == "add") {
-            response.render("add", { refuge: {} });
-        }
-
-        else{
+            })
+        } else if (request.params.id == "add") {
+            response.render("add", {
+                refuge: {}
+            });
+        } else {
             response.status(404).send('Error 404 not found');
         }
-        
+
     })
 });
 
 
 // GET Edit current values
 app.get("/refuges/edit/:id", (request, response) => {
-    let { id } = request.params;
+    let {
+        id
+    } = request.params;
 
-    Refuges.findByPk(id).then ((refuge) => {
+    Refuges.findByPk(id).then((refuge) => {
 
-        if (refuge){
-            response.render('edit',{
+        if (refuge) {
+            response.render('edit', {
                 refuge: refuge
             })
-        }else{
+        } else {
             response.status(404).send('Error 404 not found');
         }
     })
@@ -119,20 +124,19 @@ app.get("/refuges/edit/:id", (request, response) => {
 app.post("/refuges/edit/:id", (request, response) => {
     Refuges.findByPk(request.params.id).then(refuge => {
 
-        if(refuge) {
+        if (refuge) {
 
             refuge.update({
                 name: request.body.name,
                 adress: request.body.adress
             });
-        }
-        else{
+        } else {
             response.status(404).send('Error 404 not found');
         }
 
-        response.redirect('/refuges/'+request.params.id);
-        })
-            
+        response.redirect('/refuges/' + request.params.id);
+    })
+
 });
 
 
@@ -143,7 +147,7 @@ app.post("/refuges/add", (request, response) => {
         adress: request.body.adress
     }).then(() => {
         response.redirect('/refuges');
-    }).catch(()=> {
+    }).catch(() => {
         response.status(404).send('Error 404 not found');
     })
 });
@@ -152,12 +156,12 @@ app.post("/refuges/add", (request, response) => {
 // GET Delete current values
 app.get("/refuges/delete/:id", (request, response) => {
     let id = request.params.id;
-    Refuges.findByPk(id).then ((refuge)=>{
-        if (refuge){
-            response.render('delete',{
+    Refuges.findByPk(id).then((refuge) => {
+        if (refuge) {
+            response.render('delete', {
                 refuge: refuge
             })
-        }else{
+        } else {
             response.status(404).send('Error 404 not found');
         }
     })
@@ -167,16 +171,16 @@ app.get("/refuges/delete/:id", (request, response) => {
 // POST Delete
 app.post("/refuges/delete/:id", (request, response) => {
     let id = request.params.id;
-    Refuges.findByPk(id).then((refuge)=> {
+    Refuges.findByPk(id).then((refuge) => {
 
-        if(refuge){
+        if (refuge) {
             refuge.destroy().then(() => {
                 response.redirect('/refuges');
             })
-        }else{
+        } else {
             response.status(404).send('Error 404 not found');
         }
-        
+
     })
 });
 
